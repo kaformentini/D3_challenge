@@ -1,0 +1,7 @@
+Adicione uma URL:
+
+<%= form_for @crawler do |f| %>
+  <%= f.label :url, 'Adicione uma URL' %>
+  <%= f.text_field :url  %>
+  <%= f.submit 'Enviar' %>
+<% end %>
