@@ -87,12 +87,12 @@ end
 def parse_url(current_url)
   uri = URI(current_url)
 
-  if uri.host == "mineatlas.com"
+  if uri.host == "boasemente.com.br"
     return uri.to_s
   end
 
   if uri.host.nil? && (not uri.path.nil?)
-    return URI.join("http://mineatlas.com/", uri.path).to_s
+    return URI.join("http://boasemente.com.br/", uri.path).to_s
   end
     return false
 end
