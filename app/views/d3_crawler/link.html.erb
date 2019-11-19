@@ -1,0 +1,9 @@
+<%= form_with scope: :crawler, local: true do |form| %>
+  <p>
+    <%= form.label :url, 'Adicione uma URL' %><br>
+    <%= form.text_field :url %>
+  </p>
+  <p>
+    <%= form.submit 'Enviar' %>
+  </p>
+<% end %>

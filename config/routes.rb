@@ -3,11 +3,18 @@ Rails.application.routes.draw do
 
   root 'home#index'
 
-  resources :d3_crawler, only: %i[index]
+  # resources :d3_crawler, only: %i[index new create]
+  # resources :links, only: %i[new create]
+    # get 'link', on: :member
+  
+
   resources :d3_logic, only: %i[index]
 
   get 'd3_crawler', to: 'd3_crawler#result'
+  get 'd3_crawler/link', to: 'd3_crawler#link'
 
+  post 'd3_crawler/link', to: 'd3_crawler#result'
+ 
 
 
 
