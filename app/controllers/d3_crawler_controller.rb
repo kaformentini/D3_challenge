@@ -8,9 +8,10 @@ class D3CrawlerController < ApplicationController
 
   def result
     # @result = {messages: params}
-    @result = crawler(params[:crawler][:url])
-    print @result
-    render json: @result, status: :ok
+    @result_json = crawler(params[:crawler][:url])
+    # byebug
+    puts @result_json.length
+    render json: @result_json, status: :ok
   end
 
   private
@@ -22,21 +23,22 @@ class D3CrawlerController < ApplicationController
     result_map = []
     
     show_links(to_read_links, found_links, result_map)
+    return result_map
   end
 
 
   def show_links(to_read_links, found_links, result_map)
     while to_read_links.any?
       @current_url = to_read_links[0]
-      @to_read_links.delete(@current_url)
+      to_read_links.delete(@current_url)
       statics_link = find_assets(@current_url)
-      
       add_links_to_read_list(@current_url, to_read_links, found_links)
       
       found_links << @current_url
-      
+      puts @current
       result_map << {@current_url => statics_link}
-      byebug
+    
+
     end
 end
 
@@ -46,16 +48,17 @@ def add_links_to_read_list(raw_url, to_read_links, found_links)
         if url == false
             return
         end
-
+        
         doc = Nokogiri::HTML(open(url))
         current_url_links = doc.css('a[href]').map{|a| a['href']}
 
         current_url_links.each do |link|
-                        
+                                   
             link = parse_url(link)
             
             if link && pre_conditions(link, to_read_links, found_links)
                 to_read_links << link
+                
             end
         end
     
@@ -65,7 +68,6 @@ def add_links_to_read_list(raw_url, to_read_links, found_links)
 end
 
 def find_assets(current_url)
-  # byebug
     begin
         doc = Nokogiri::HTML(open(@current_url))
         link = doc.css('a[href]').map{|a| a['href']}
@@ -88,14 +90,13 @@ end
 def parse_url(current_url)
     uri = URI(current_url)
 
-    if uri.host == "boasemente.com.br"
+    if uri.host == "mineatlas.com"
         return uri.to_s
     end
 
     if uri.host.nil? && (not uri.path.nil?)
-        return URI.join("https://boasemente.com.br/", uri.path).to_s
+        return URI.join("http://mineatlas.com/", uri.path).to_s
     end
-
     return false
 end
   
