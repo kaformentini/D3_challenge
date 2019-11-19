@@ -12,6 +12,7 @@ Rails.application.routes.draw do
 
   get 'd3_crawler', to: 'd3_crawler#result'
   get 'd3_crawler/link', to: 'd3_crawler#link'
+  get 'contato', to: 'contact#index'
 
   post 'd3_crawler/link', to: 'd3_crawler#result'
  
