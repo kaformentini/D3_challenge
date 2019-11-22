@@ -2,7 +2,7 @@
 
 Nese aplicação você encontrará desafios de programação.
 
-###WebCrawler - D3
+***WebCrawler - D3***
     Aplicação que, dado uma determinada url, devolverá um objeto JSON contendo as páginas do domínio, e o conteúdo de alguns assets staticos (css, js, img) de cada página.
 
     Essa função percorre todos os links contidos nas páginas, faz uma seleção das páginas do próprio domínio, salvando em um hash cada links e seus staticos;
