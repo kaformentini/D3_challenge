@@ -16,32 +16,34 @@ class D3CrawlerController < ApplicationController
   private
 
   def crawler(url)
-    @home_link = url
-    to_read_links = [@home_link]
+    home_link = url
+    to_read_links = [home_link]
     found_links = []
     result_map = []
     
-    show_links(to_read_links, found_links, result_map)
+    show_links(to_read_links, found_links, result_map, home_link)
     return result_map
   end
 
 
-def show_links(to_read_links, found_links, result_map)
+def show_links(to_read_links, found_links, result_map, home_link)
   while to_read_links.any?
-      @current_url = to_read_links[0]
-      to_read_links.delete(@current_url)
-      statics_link = find_assets(@current_url)
-      add_links_to_read_list(@current_url, to_read_links, found_links)
       
+      @current_url = to_read_links[0]
+      
+      statics_link = find_assets(@current_url)
       found_links << @current_url
-      puts @current
+      add_links_to_read_list(@current_url, to_read_links, found_links, home_link)
+      to_read_links.delete(@current_url)
+      
+      
       result_map << {@current_url => statics_link}
   end
 end
 
-def add_links_to_read_list(raw_url, to_read_links, found_links)
+def add_links_to_read_list(raw_url, to_read_links, found_links, home_link)
   begin
-    url = parse_url(raw_url)
+    url = parse_url(raw_url, home_link)
     if url == false
       return
     end
@@ -51,7 +53,7 @@ def add_links_to_read_list(raw_url, to_read_links, found_links)
 
     current_url_links.each do |link|
                                 
-      link = parse_url(link)
+      link = parse_url(link, home_link)
       
       if link && pre_conditions(link, to_read_links, found_links)
         to_read_links << link
@@ -84,15 +86,16 @@ def pre_conditions(link, to_read_links, found_links)
     return true
 end
 
-def parse_url(current_url)
+def parse_url(current_url, home_link)
   uri = URI(current_url)
+  home_uri = URI(home_link)
 
-  if uri.host == "boasemente.com.br"
+  if uri.host == home_uri.host
     return uri.to_s
   end
 
   if uri.host.nil? && (not uri.path.nil?)
-    return URI.join("http://boasemente.com.br/", uri.path).to_s
+    return URI.join(home_link, uri.path).to_s
   end
     return false
 end
